@@ -1,5 +1,5 @@
-import { apiUtils } from '../lib/api';
-import { API_ENDPOINTS } from '../constants/api';
+import { apiUtils } from "../lib/api";
+import { API_ENDPOINTS } from "../constants/api";
 
 export const userService = {
   // Get user profile

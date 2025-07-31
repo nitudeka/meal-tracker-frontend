@@ -19,14 +19,14 @@ const LoginPage = () => {
         <p className="text-gray-500 dark:text-gray-300 mb-6 text-center">
           Sign in to your account with Google
         </p>
-        
+
         {/* Error Display */}
         {error && (
           <div className="w-full mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
             {error}
           </div>
         )}
-        
+
         {/* Loading State */}
         {loading && (
           <div className="w-full mb-4 p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded text-sm text-center">
@@ -39,17 +39,19 @@ const LoginPage = () => {
               if (credentialResponse.credential) {
                 setLoading(true);
                 setError(null);
-                
+
                 try {
-                  const response = await authService.login({ idToken: credentialResponse.credential });
+                  const response = await authService.login({
+                    idToken: credentialResponse.credential,
+                  });
                   login(response);
                 } catch (err) {
-                  console.error('Login error details:', {
+                  console.error("Login error details:", {
                     message: err.message,
                     status: err.response?.status,
-                    data: err.response?.data
+                    data: err.response?.data,
                   });
-                  setError(err.message || 'Login failed. Please try again.');
+                  setError(err.message || "Login failed. Please try again.");
                 } finally {
                   setLoading(false);
                 }

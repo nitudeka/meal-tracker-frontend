@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { userService, authService } from '../services';
+import React, { useState, useEffect } from "react";
+import { userService, authService } from "../services";
 
 const ExampleApiUsage = () => {
   const [profile, setProfile] = useState(null);
@@ -16,7 +16,7 @@ const ExampleApiUsage = () => {
   const fetchProfile = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const data = await userService.getProfile();
       setProfile(data);
@@ -30,11 +30,11 @@ const ExampleApiUsage = () => {
   // Update profile
   const updateProfile = async () => {
     if (!profile) return;
-    
+
     try {
       const updated = await userService.updateProfile({
-        name: profile.name + ' (Updated)',
-        email: profile.email
+        name: profile.name + " (Updated)",
+        email: profile.email,
       });
       setProfile(updated);
       setError(null);
@@ -50,7 +50,7 @@ const ExampleApiUsage = () => {
 
     try {
       const response = await userService.uploadProfilePicture(file);
-      console.log('File uploaded:', response);
+      console.log("File uploaded:", response);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -72,11 +72,11 @@ const ExampleApiUsage = () => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4">API Usage Example</h2>
-      
+
       {/* Authentication Status */}
       <div className="mb-4">
         <p className="text-sm text-gray-600">
-          Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
+          Status: {isAuthenticated ? "Authenticated" : "Not Authenticated"}
         </p>
       </div>
 
@@ -90,13 +90,17 @@ const ExampleApiUsage = () => {
       {/* Profile Section */}
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2">User Profile</h3>
-        
+
         {loading && <p className="text-blue-600">Loading...</p>}
-        
+
         {profile ? (
           <div className="space-y-2">
-            <p><strong>Name:</strong> {profile.name}</p>
-            <p><strong>Email:</strong> {profile.email}</p>
+            <p>
+              <strong>Name:</strong> {profile.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {profile.email}
+            </p>
             <button
               onClick={updateProfile}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -140,7 +144,12 @@ const ExampleApiUsage = () => {
       <div className="mt-6 p-4 bg-gray-50 rounded">
         <h4 className="font-semibold mb-2">How to use:</h4>
         <ol className="text-sm text-gray-600 space-y-1">
-          <li>1. Import services: <code>import {`{ userService, authService }`} from '../services'</code></li>
+          <li>
+            1. Import services:{" "}
+            <code>
+              import {`{ userService, authService }`} from '../services'
+            </code>
+          </li>
           <li>2. Use try-catch for error handling</li>
           <li>3. Implement loading states for better UX</li>
           <li>4. Let the utility handle authentication automatically</li>
@@ -150,4 +159,4 @@ const ExampleApiUsage = () => {
   );
 };
 
-export default ExampleApiUsage; 
+export default ExampleApiUsage;

@@ -1,17 +1,17 @@
 // API Configuration Constants
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // API Endpoints
 export const API_ENDPOINTS = {
   // Auth endpoints
   AUTH: {
-    LOGIN: '/auth/login',
-    REFRESH_TOKEN: '/auth/refresh'
+    LOGIN: "/auth/login",
+    REFRESH_TOKEN: "/auth/refresh",
   },
-  
+
   // User endpoints
   USER: {
-    PROFILE: '/user/profile',
+    PROFILE: "/user/profile",
   },
 };
 
@@ -32,4 +32,4 @@ export const HTTP_STATUS = {
 };
 
 // Request timeout (in milliseconds)
-export const REQUEST_TIMEOUT = 30000; // 30 seconds 
+export const REQUEST_TIMEOUT = 30000; // 30 seconds
