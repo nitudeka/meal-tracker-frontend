@@ -7,6 +7,9 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import DatePicker from "@/components/ui/date-picker"
+import { cn } from "@/lib/utils"
 
 const entryTypes = [
     {
@@ -61,7 +64,9 @@ const moodOptions = [
 ]
 
 const AddMood = () => {
-    const [entryType, setEntryType] = useState()
+    const [entryType, setEntryType] = useState("daily-checkin")
+    const [date, setDate] = useState(new Date())
+    const [mood, setMood] = useState()
 
     const selectedEntryTypeQuestion = useMemo(() => {
         if (!entryType) return ""
@@ -70,6 +75,11 @@ const AddMood = () => {
     }, [entryType])
     
   return <div>
+    <div className="mb-4">
+        <Label className="text-xs font-medium mb-2">Date</Label>
+        <DatePicker date={date} setDate={setDate} />
+    </div>
+    <Label className="text-xs font-medium mb-2">Entry Type</Label>
     <Select value={entryType} onValueChange={setEntryType}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="Select Entry Type" />
@@ -81,12 +91,12 @@ const AddMood = () => {
   </SelectContent>
 </Select>
 <div className="mt-4">
-    <h3 className="text-xs font-medium mb-4">{selectedEntryTypeQuestion}</h3>
+    <Label className="text-xs font-medium mb-2">{selectedEntryTypeQuestion}</Label>
     <div className="grid grid-cols-3 grid-rows-2 gap-4 mb-4">
-        {moodOptions.map((mood) => (
-            <div key={mood.id} className="flex flex-col items-center justify-center">
-                <span className="text-2xl">{mood.icon}</span>
-                <span className="text-sm">{mood.label}</span>
+        {moodOptions.map((m) => (
+            <div key={m.id} className={cn("flex border cursor-pointer hover:bg-muted rounded-md py-1.5 flex-col items-center justify-center", mood === m.id && "bg-gray-200")} onClick={() => setMood(m.id)}>
+                <span className="text-2xl">{m.icon}</span>
+                <span className="text-sm">{m.label}</span>
             </div>
         ))}
     </div>
