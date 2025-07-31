@@ -12,12 +12,12 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const moodLevels = [
-  { value: 5, label: "Happy", emoji: "😊" },
-  { value: 4, label: "Content", emoji: "🙂" },
-  { value: 3, label: "Neutral", emoji: "😐" },
-  { value: 2, label: "Stressed", emoji: "😰" },
-  { value: 1, label: "Sad", emoji: "😔" },
-  { value: 0, label: "Angry", emoji: "😡" },
+  { value: 5, mood: "happy", label: "Happy", emoji: "😊" },
+  { value: 4, mood: "content", label: "Content", emoji: "🙂" },
+  { value: 3, mood: "neutral", label: "Neutral", emoji: "😐" },
+  { value: 2, mood: "stressed", label: "Stressed", emoji: "😰" },
+  { value: 1, mood: "sad", label: "Sad", emoji: "😔" },
+  { value: 0, mood: "angry", label: "Angry", emoji: "😡" },
 ];
 
 const entryTypeColors = {
@@ -81,10 +81,9 @@ const MoodChart = ({ moodEntries = [] }) => {
           day: dayLetter,
         };
       }
-      
       // Convert mood string to numeric value
-      const moodValue = moodLevels.find(level => level.label.toLowerCase() === entry.mood.toLowerCase())?.value || 3;
-      
+      const moodValue = moodLevels.find(level => level.mood.toLowerCase() === entry.mood.toLowerCase())?.value;
+
       groupedData[dayKey][entry.entryType] = moodValue;
     });
 
@@ -199,13 +198,13 @@ const MoodChart = ({ moodEntries = [] }) => {
                 return (
                   <Line
                     key={entryType}
-                    type="monotone"
+                    type="step"
                     dataKey={entryType}
                     stroke={entryTypeColors[entryType]}
                     strokeWidth={3}
                     dot={{ fill: entryTypeColors[entryType], strokeWidth: 2, r: 4 }}
                     activeDot={{ r: 6, stroke: entryTypeColors[entryType], strokeWidth: 2 }}
-                    connectNulls={false}
+                    connectNulls={true}
                   />
                 );
               })}

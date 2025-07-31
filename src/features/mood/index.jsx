@@ -40,7 +40,7 @@ const MoodPage = () => {
     <div className="max-w-4xl mx-auto p-6 h-full overflow-y-auto hide-scrollbar">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Hi, {getUserName()}!</h2>
+          <h2 className="text-lg font-bold text-gray-600">hi, <span className="text-3xl text-gray-900">{getUserName().split(" ")[0]}!</span></h2>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
