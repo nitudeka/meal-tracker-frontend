@@ -12,7 +12,7 @@ export const moodService = {
     });
   },
 
-  // Get mood entries (for future use)
+  // Get mood entries with optional date range
   getMoodEntries: async (params = {}) => {
     return await apiUtils.get("/mood", { params });
   },
