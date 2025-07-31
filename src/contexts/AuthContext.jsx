@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import { ACCESS_TOKEN_KEY } from '../constants/common';
+import { createContext, useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { ACCESS_TOKEN_KEY } from "../constants/common";
 
 const AuthContext = createContext(null);
 
@@ -20,23 +20,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem(ACCESS_TOKEN_KEY)
+    const token = localStorage.getItem(ACCESS_TOKEN_KEY);
 
-    if (pathname.pathname === '/login' && token) {
-      setCheckingAuth(false)
-      setIsAuthenticated(true)
-      navigate('/')
+    if (pathname.pathname === "/login" && token) {
+      setCheckingAuth(false);
+      setIsAuthenticated(true);
+      navigate("/");
     }
 
     if (token) {
-      setIsAuthenticated(true)
+      setIsAuthenticated(true);
     }
 
-    setCheckingAuth(false)
-  }, [])
+    setCheckingAuth(false);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, checkingAuth }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, logout, checkingAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );

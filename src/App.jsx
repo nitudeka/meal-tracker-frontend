@@ -1,14 +1,14 @@
-import { AuthProvider } from './contexts/AuthContext'
-import Router from './router'
+import { AuthProvider } from "./contexts/AuthContext";
+import Router from "./router";
 
 function App() {
   return (
     <>
       <AuthProvider>
-	<Router />
+        <Router />
       </AuthProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -6,18 +6,16 @@ const PrivateRoute = () => {
   const { checkingAuth, isAuthenticated } = useAuth();
 
   if (checkingAuth) {
-    return (
-      <div>Checking Auth...</div>
-    )
+    return <div>Checking Auth...</div>;
   }
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
 
   return (
     <MobileLayout>
       <Outlet />
     </MobileLayout>
-  )
-}
+  );
+};
 
 export default PrivateRoute;
