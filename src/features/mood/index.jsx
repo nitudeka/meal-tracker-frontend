@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +10,16 @@ import { Button } from "@/components/ui/button";
 import AddMood from "./AddMood";
 
 const MoodPage = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleMoodSaved = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div>
       <h2>Hi John Doe!</h2>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button>Add Entry</Button>
         </DialogTrigger>
@@ -20,7 +27,7 @@ const MoodPage = () => {
           <DialogHeader>
             <DialogTitle>Add Mood Entry</DialogTitle>
           </DialogHeader>
-          <AddMood />
+          <AddMood onMoodSaved={handleMoodSaved} />
         </DialogContent>
       </Dialog>
     </div>

@@ -64,7 +64,7 @@ const moodOptions = [
   },
 ];
 
-const AddMood = () => {
+const AddMood = ({ onMoodSaved }) => {
   const [entryType, setEntryType] = useState("daily-checkin");
   const [date, setDate] = useState(new Date());
   const [mood, setMood] = useState();
@@ -97,6 +97,10 @@ const AddMood = () => {
       setMood("");
       setDate(new Date());
       setEntryType("daily-checkin");
+
+      if (onMoodSaved) {
+        onMoodSaved();
+      }
     } catch (err) {
       toast.error(err.message || "Failed to save mood entry");
     } finally {
