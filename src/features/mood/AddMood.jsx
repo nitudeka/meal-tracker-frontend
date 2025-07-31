@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { toast } from "sonner"
 import {
   Select,
   SelectContent,
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import DatePicker from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
+import { moodService } from "@/services";
 
 const entryTypes = [
   {
@@ -66,12 +68,41 @@ const AddMood = () => {
   const [entryType, setEntryType] = useState("daily-checkin");
   const [date, setDate] = useState(new Date());
   const [mood, setMood] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const selectedEntryTypeQuestion = useMemo(() => {
     if (!entryType) return "";
 
     return entryTypes.find((entry) => entry.id === entryType)?.question || "";
   }, [entryType]);
+
+  const handleSaveMood = async () => {
+    if (!mood) {
+      setError("Please select a mood");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      await moodService.saveMoodEntry({
+        date,
+        entryType,
+        mood,
+      });
+      
+      // Reset form after successful save
+      setMood("");
+      setDate(new Date());
+      setEntryType("daily-checkin");
+    } catch (err) {
+      toast.error(err.message || "Failed to save mood entry");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -112,7 +143,20 @@ const AddMood = () => {
           ))}
         </div>
       </div>
-      <Button className="w-full">Add Entry</Button>
+      
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
+      
+      <Button 
+        className="w-full" 
+        onClick={handleSaveMood}
+        disabled={isLoading || !mood}
+      >
+        {isLoading ? "Saving..." : "Add Entry"}
+      </Button>
     </div>
   );
 };
