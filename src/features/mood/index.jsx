@@ -7,13 +7,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useUserProfile } from "@/hooks";
+import { useUserProfile, useMoodEntries } from "@/hooks";
 import AddMood from "./AddMood";
 import MoodHistory from "./MoodHistory";
+import MoodChart from "./MoodChart";
 
 const MoodPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { data: userProfile, isLoading: isProfileLoading } = useUserProfile();
+  const { data: moodEntriesData = {} } = useMoodEntries();
+  const moodEntries = moodEntriesData?.data || [];
 
   const handleMoodSaved = () => {
     setIsDialogOpen(false);
@@ -54,6 +57,11 @@ const MoodPage = () => {
         </Dialog>
       </div>
       <p className="text-gray-600 mt-1 mb-4">Track your daily mood and wellness journey</p>
+
+      {/* Mood Chart Component */}
+      <div className="mb-6">
+        <MoodChart moodEntries={moodEntries} />
+      </div>
 
       {/* Mood History Component */}
       <MoodHistory 
