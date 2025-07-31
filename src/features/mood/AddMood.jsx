@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import DatePicker from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
-import { moodService } from "@/services";
+import { useSaveMoodEntry } from "@/hooks/useMood";
 
 const entryTypes = [
   {
@@ -68,8 +68,9 @@ const AddMood = ({ onMoodSaved }) => {
   const [entryType, setEntryType] = useState("daily-checkin");
   const [date, setDate] = useState(new Date());
   const [mood, setMood] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const saveMoodMutation = useSaveMoodEntry();
 
   const selectedEntryTypeQuestion = useMemo(() => {
     if (!entryType) return "";
@@ -83,29 +84,30 @@ const AddMood = ({ onMoodSaved }) => {
       return;
     }
 
-    setIsLoading(true);
     setError("");
 
-    try {
-      await moodService.saveMoodEntry({
+    saveMoodMutation.mutate(
+      {
         date,
         entryType,
         mood,
-      });
-      
-      // Reset form after successful save
-      setMood("");
-      setDate(new Date());
-      setEntryType("daily-checkin");
+      },
+      {
+        onSuccess: () => {
+          // Reset form after successful save
+          setMood("");
+          setDate(new Date());
+          setEntryType("daily-checkin");
 
-      if (onMoodSaved) {
-        onMoodSaved();
+          if (onMoodSaved) {
+            onMoodSaved();
+          }
+        },
+        onError: (err) => {
+          toast.error(err.message || "Failed to save mood entry");
+        },
       }
-    } catch (err) {
-      toast.error(err.message || "Failed to save mood entry");
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
 
   return (
@@ -157,9 +159,9 @@ const AddMood = ({ onMoodSaved }) => {
       <Button 
         className="w-full" 
         onClick={handleSaveMood}
-        disabled={isLoading || !mood}
+        disabled={saveMoodMutation.isPending || !mood}
       >
-        {isLoading ? "Saving..." : "Add Entry"}
+        {saveMoodMutation.isPending ? "Saving..." : "Add Entry"}
       </Button>
     </div>
   );
