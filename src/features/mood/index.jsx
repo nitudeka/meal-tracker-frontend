@@ -13,7 +13,7 @@ const MoodPage = () => {
     <div>
       <h2>Hi John Doe!</h2>
       <Dialog>
-  <DialogTrigger>
+  <DialogTrigger asChild>
     <Button>Add Entry</Button>
   </DialogTrigger>
   <DialogContent>
