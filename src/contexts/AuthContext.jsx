@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { ACCESS_TOKEN_KEY } from "../constants/common";
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../constants/common";
 
 const AuthContext = createContext(null);
 
@@ -10,12 +10,16 @@ export const AuthProvider = ({ children }) => {
   const pathname = useLocation();
   const navigate = useNavigate();
 
-  const login = (token) => {
-    localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  const login = (response) => {
+    localStorage.setItem(ACCESS_TOKEN_KEY, response.token);
+    localStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
     setIsAuthenticated(true);
+    navigate("/");
   };
+
   const logout = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
     setIsAuthenticated(false);
   };
 
