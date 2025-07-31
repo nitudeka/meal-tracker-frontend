@@ -129,25 +129,25 @@ export const handleApiError = (error) => {
 
     switch (status) {
       case HTTP_STATUS.BAD_REQUEST:
-        return new Error(data?.message || "Bad request");
+        return new Error(data?.error || "Bad request");
       case HTTP_STATUS.UNAUTHORIZED:
-        return new Error(data?.message || "Unauthorized access");
+        return new Error(data?.error || "Unauthorized access");
       case HTTP_STATUS.FORBIDDEN:
-        return new Error(data?.message || "Access forbidden");
+        return new Error(data?.error || "Access forbidden");
       case HTTP_STATUS.NOT_FOUND:
-        return new Error(data?.message || "Resource not found");
+        return new Error(data?.error || "Resource not found");
       case HTTP_STATUS.CONFLICT:
-        return new Error(data?.message || "Resource conflict");
+        return new Error(data?.error || "Resource conflict");
       case HTTP_STATUS.UNPROCESSABLE_ENTITY:
-        return new Error(data?.message || "Validation error");
+        return new Error(data?.error || "Validation error");
       case HTTP_STATUS.INTERNAL_SERVER_ERROR:
-        return new Error(data?.message || "Internal server error");
+        return new Error(data?.error || "Internal server error");
       case HTTP_STATUS.BAD_GATEWAY:
-        return new Error(data?.message || "Bad gateway");
+        return new Error(data?.error || "Bad gateway");
       case HTTP_STATUS.SERVICE_UNAVAILABLE:
-        return new Error(data?.message || "Service unavailable");
+        return new Error(data?.error || "Service unavailable");
       default:
-        return new Error(data?.message || `HTTP ${status} error`);
+        return new Error(data?.error || `HTTP ${status} error`);
     }
   } else if (error.request) {
     // Request was made but no response received
