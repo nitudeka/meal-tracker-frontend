@@ -10,9 +10,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-function DatePicker({ date, setDate }) {
+function DatePicker({ date, setDate, disabled }) {
   const handleDateChange = (date) => {
     setDate(date);
+  };
+
+  // Disable future dates
+  const disabledDays = {
+    after: new Date(), // Disable all dates after today
   };
 
   return (
@@ -21,6 +26,7 @@ function DatePicker({ date, setDate }) {
         <Button
           variant="outline"
           data-empty={!date}
+          disabled={disabled}
           className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal"
         >
           <CalendarIcon />
@@ -28,7 +34,12 @@ function DatePicker({ date, setDate }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" selected={date} onSelect={handleDateChange} />
+        <Calendar 
+          mode="single" 
+          selected={date} 
+          onSelect={handleDateChange}
+          disabled={disabledDays}
+        />
       </PopoverContent>
     </Popover>
   );
