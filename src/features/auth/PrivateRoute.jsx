@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
+import MobileLayout from "../../layouts/MobileLayout";
 
 const PrivateRoute = () => {
   const { checkingAuth, isAuthenticated } = useAuth();
@@ -12,7 +13,11 @@ const PrivateRoute = () => {
 
   if (!isAuthenticated) return <Navigate to="/login" replace />
 
-  return <Outlet />
+  return (
+    <MobileLayout>
+      <Outlet />
+    </MobileLayout>
+  )
 }
 
 export default PrivateRoute;

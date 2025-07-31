@@ -119,3 +119,10 @@
   }
 }
 
+.mobile-container {
+  @apply w-full max-w-xs bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 flex flex-col items-center;
+
+  /* iphone 7 screen width and height aspect ratio */
+
+  height: calc(100vh - 4rem);
+}
