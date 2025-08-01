@@ -71,7 +71,7 @@ const DietPage = () => {
       onSuccess: (data) => {
         console.log("Diet entry saved successfully:", data);
         toast.success("Diet entry saved successfully!");
-        queryClient.invalidateQueries({ queryKey: dietKeys.lists() });
+        queryClient.invalidateQueries({ queryKey: dietKeys.all });
         navigate("/diet");
       },
       onError: (error) => {
