@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSaveDietEntry } from "@/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
+import { dietKeys, useSaveDietEntry } from "@/hooks";
 import Dish from "./addDietEntry/Dish";
 import Nutrients from "./addDietEntry/Nutrients";
 import DietTime from "./addDietEntry/Time";
@@ -25,7 +26,8 @@ const DietPage = () => {
     mealType: "",
   });
 
-  const { mutate: saveDietEntry, isLoading: isSaving } = useSaveDietEntry();
+  const { mutate: saveDietEntry, isPending: isSaving } = useSaveDietEntry();
+  const queryClient = useQueryClient();
 
   const steps = [
     { id: 1, title: "Ingredients", component: Dish },
@@ -69,6 +71,7 @@ const DietPage = () => {
       onSuccess: (data) => {
         console.log("Diet entry saved successfully:", data);
         toast.success("Diet entry saved successfully!");
+        queryClient.invalidateQueries({ queryKey: dietKeys.lists() });
         navigate("/diet");
       },
       onError: (error) => {

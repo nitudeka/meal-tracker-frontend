@@ -7,7 +7,7 @@ const MobileLayout = ({ children }) => {
     <div
       className={`min-h-screen flex items-center justify-center ${bgClassName}`}
     >
-      <div className="mobile-container">
+      <div className="mobile-container overflow-hidden">
         <div className="relative pb-16 h-full">
           {children}
           <BottomNav />

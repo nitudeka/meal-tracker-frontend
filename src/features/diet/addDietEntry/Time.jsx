@@ -84,7 +84,8 @@ const DietTime = ({
         </Button>
         <Button
           onClick={handleSubmit}
-          disabled={!mealType || isSaving}
+          disabled={!mealType}
+          loading={isSaving}
           className="bg-green-600 hover:bg-green-700 text-white"
         >
           {isSaving ? "Saving..." : "Confirm"}

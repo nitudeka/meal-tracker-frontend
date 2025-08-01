@@ -13,13 +13,14 @@ const Dish = ({ formData, onComplete, onNext }) => {
   const {
     mutate: fetchIngredients,
     data: ingredientsData,
-    isLoading,
+    isPending,
     error,
-  } = useIngredients();
+    ...rest
+  } = useIngredients()
 
   const {
     mutate: fetchNutrients,
-    isLoading: isLoadingNutrients,
+    isPending: isLoadingNutrients,
   } = useNutrients();
 
   const handleFetchIngredients = () => {
@@ -147,10 +148,11 @@ const Dish = ({ formData, onComplete, onNext }) => {
       {/* Get Ingredients Button */}
       <Button
         onClick={handleFetchIngredients}
-        disabled={!dish.trim() || isLoading}
+        loading={isPending}
+        disabled={!dish.trim()}
         className="w-full bg-green-600 hover:bg-green-700 text-white"
       >
-        {isLoading ? "Loading..." : "Get Ingredients"}
+        {isPending ? "Loading..." : "Get Ingredients"}
       </Button>
 
       {/* Ingredients Section */}
@@ -222,7 +224,8 @@ const Dish = ({ formData, onComplete, onNext }) => {
       <div className="flex justify-end">
         <Button
           onClick={handleNext}
-          disabled={!dish || ingredients.length === 0 || isLoadingNutrients}
+          disabled={!dish || ingredients.length === 0}
+          loading={isLoadingNutrients}
           className="bg-green-600 hover:bg-green-700 text-white"
         >
           {isLoadingNutrients ? "Loading..." : "Next"}

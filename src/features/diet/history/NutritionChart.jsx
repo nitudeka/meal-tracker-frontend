@@ -45,8 +45,6 @@ const NutritionChart = () => {
       goalKey,
       color,
       name,
-      domain: activeTab === "protein" ? [2.5, 6] : [0, 3.5],
-      ticks: activeTab === "protein" ? [2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] : [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5]
     };
   };
 
@@ -67,7 +65,6 @@ const NutritionChart = () => {
             </text>
           </>
         )}
-        
       </g>
     );
   };
@@ -136,8 +133,6 @@ const NutritionChart = () => {
                 tick={<CustomYAxisTick />}
                 axisLine={false}
                 tickLine={false}
-                domain={getChartData().domain}
-                ticks={getChartData().ticks}
                 width={30}
               />
               <Tooltip content={<CustomTooltip />} />
