@@ -120,7 +120,7 @@ const NutritionChart = () => {
         </div>
 
         {/* Chart */}
-        <div className="h-64">
+        <div className="h-64 -mr-6">
           {isLoading && (
             <div className="flex justify-center items-center h-full">
               <div className="text-gray-500">Loading nutrition data...</div>
@@ -149,7 +149,6 @@ const NutritionChart = () => {
                 tick={<CustomYAxisTick />}
                 axisLine={false}
                 tickLine={false}
-                width={30}
               />
               <Tooltip content={<CustomTooltip />} />
               

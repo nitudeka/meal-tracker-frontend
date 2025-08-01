@@ -68,7 +68,7 @@ const Meals = () => {
               {/* Meals List */}
               <div className="py-4 px-2 space-y-3">
                 {dayData.meals.map((meal, mealIndex) => (
-                  <div key={mealIndex} className="space-x-2 text-xs">
+                  <div key={mealIndex} className="flex flex-wrap text-xs">
                     <span className="font-semibold text-gray-400">
                       {getMealTypeLabel(meal.mealType)}:
                     </span>

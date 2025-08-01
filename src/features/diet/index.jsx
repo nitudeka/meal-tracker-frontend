@@ -63,7 +63,7 @@ const DietPage = () => {
       dish: formData.dish,
       ingredients: formData.ingredients,
       nutrients: formData.nutrients,
-      date: formData.date.toISOString().split('T')[0], // Format as YYYY-MM-DD
+      date: formData.date.toISOString(), // Format as YYYY-MM-DD
       mealType: formData.mealType
     };
 
