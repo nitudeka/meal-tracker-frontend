@@ -15,4 +15,4 @@ export const useUserProfile = () => {
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 1,
   });
-}; 
+};

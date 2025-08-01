@@ -40,7 +40,7 @@ const DietPage = () => {
   };
 
   const handleStepComplete = (stepData) => {
-    setFormData(prev => ({ ...prev, ...stepData }));
+    setFormData((prev) => ({ ...prev, ...stepData }));
   };
 
   const handleSubmit = () => {

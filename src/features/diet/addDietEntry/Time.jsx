@@ -4,7 +4,14 @@ import { Label } from "@/components/ui/label";
 import DatePicker from "@/components/ui/date-picker";
 import { Calendar, Utensils } from "lucide-react";
 
-const DietTime = ({ formData, onComplete, onNext, onPrevious, currentStep, totalSteps }) => {
+const DietTime = ({
+  formData,
+  onComplete,
+  onNext,
+  onPrevious,
+  currentStep,
+  totalSteps,
+}) => {
   const [date, setDate] = useState(formData?.date || new Date());
   const [mealType, setMealType] = useState(formData?.mealType || "");
 
@@ -30,7 +37,8 @@ const DietTime = ({ formData, onComplete, onNext, onPrevious, currentStep, total
           When Did This Feast Go Down?
         </h3>
         <p className="text-sm text-gray-600 mt-2">
-          Pick a date and a time slot — breakfast, lunch, dinner, or just a snack — and we'll log it accordingly. 😅
+          Pick a date and a time slot — breakfast, lunch, dinner, or just a
+          snack — and we'll log it accordingly. 😅
         </p>
       </div>
 
@@ -44,7 +52,9 @@ const DietTime = ({ formData, onComplete, onNext, onPrevious, currentStep, total
 
       {/* Meal Type Selection */}
       <div>
-        <Label className="text-sm font-medium text-gray-700 mb-3 block">Meal Type</Label>
+        <Label className="text-sm font-medium text-gray-700 mb-3 block">
+          Meal Type
+        </Label>
         <div className="space-y-2">
           {mealTypes.map((type) => (
             <label
@@ -59,7 +69,9 @@ const DietTime = ({ formData, onComplete, onNext, onPrevious, currentStep, total
                 onChange={(e) => setMealType(e.target.value)}
                 className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
               />
-              <span className="text-sm font-medium text-gray-700">{type.label}</span>
+              <span className="text-sm font-medium text-gray-700">
+                {type.label}
+              </span>
             </label>
           ))}
         </div>

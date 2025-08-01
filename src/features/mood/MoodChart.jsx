@@ -38,43 +38,43 @@ const MoodChart = ({ moodEntries = [] }) => {
     const generateWeekDays = () => {
       const today = new Date();
       const days = [];
-      
+
       // Get the start of the week (7 days ago)
       const startDate = new Date(today);
       startDate.setDate(today.getDate() - 6);
-      
+
       // Generate all 7 days
       for (let i = 0; i < 7; i++) {
         const date = new Date(startDate);
         date.setDate(startDate.getDate() + i);
-        
-        const dayKey = date.toISOString().split('T')[0]; // YYYY-MM-DD format
-        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+
+        const dayKey = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+        const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
         const dayLetter = dayName.charAt(0); // Get first letter
-        
+
         days.push({
           date: dayKey,
           day: dayLetter,
         });
       }
-      
+
       return days;
     };
 
     // Get all week days
     const weekDays = generateWeekDays();
-    
+
     if (!moodEntries.length) return weekDays;
 
     // Group entries by date and entry type
     const groupedData = {};
-    
-    moodEntries.forEach(entry => {
+
+    moodEntries.forEach((entry) => {
       const date = new Date(entry.date);
-      const dayKey = date.toISOString().split('T')[0]; // YYYY-MM-DD format
-      
+      const dayKey = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+
       if (!groupedData[dayKey]) {
-        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+        const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
         const dayLetter = dayName.charAt(0); // Get first letter
         groupedData[dayKey] = {
           date: dayKey,
@@ -82,15 +82,17 @@ const MoodChart = ({ moodEntries = [] }) => {
         };
       }
       // Convert mood string to numeric value
-      const moodValue = moodLevels.find(level => level.mood.toLowerCase() === entry.mood.toLowerCase())?.value;
+      const moodValue = moodLevels.find(
+        (level) => level.mood.toLowerCase() === entry.mood.toLowerCase(),
+      )?.value;
 
       groupedData[dayKey][entry.entryType] = moodValue;
     });
 
     // Merge week days with mood data
-    return weekDays.map(weekDay => ({
+    return weekDays.map((weekDay) => ({
       ...weekDay,
-      ...groupedData[weekDay.date]
+      ...groupedData[weekDay.date],
     }));
   }, [moodEntries]);
 
@@ -100,10 +102,13 @@ const MoodChart = ({ moodEntries = [] }) => {
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900">{label}</p>
           {payload.map((entry, index) => {
-            const moodLevel = moodLevels.find(level => level.value === entry.value);
+            const moodLevel = moodLevels.find(
+              (level) => level.value === entry.value,
+            );
             return (
               <p key={index} className="text-sm" style={{ color: entry.color }}>
-                {entryTypeLabels[entry.dataKey]}: {moodLevel?.emoji} {moodLevel?.label}
+                {entryTypeLabels[entry.dataKey]}: {moodLevel?.emoji}{" "}
+                {moodLevel?.label}
               </p>
             );
           })}
@@ -114,10 +119,17 @@ const MoodChart = ({ moodEntries = [] }) => {
   };
 
   const CustomYAxisTick = ({ x, y, payload }) => {
-    const moodLevel = moodLevels.find(level => level.value === payload.value);
+    const moodLevel = moodLevels.find((level) => level.value === payload.value);
     return (
       <g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={4} textAnchor="end" fill="#666" className="text-xs">
+        <text
+          x={0}
+          y={0}
+          dy={4}
+          textAnchor="end"
+          fill="#666"
+          className="text-xs"
+        >
           {moodLevel?.emoji}
         </text>
       </g>
@@ -164,20 +176,27 @@ const MoodChart = ({ moodEntries = [] }) => {
       <CardHeader>
         <CardTitle>Mood Trends</CardTitle>
       </CardHeader>
-              <CardContent>
-          <div className="h-80 focus:outline-none">
-            <ResponsiveContainer width="100%" height="100%" className="outline-none focus:outline-none">
-            <LineChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 20 }}>
+      <CardContent>
+        <div className="h-80 focus:outline-none">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            className="outline-none focus:outline-none"
+          >
+            <LineChart
+              data={chartData}
+              margin={{ top: 20, right: 10, left: 10, bottom: 20 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis 
-                dataKey="day" 
+              <XAxis
+                dataKey="day"
                 stroke="#666"
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
                 height={30}
               />
-              <YAxis 
+              <YAxis
                 domain={[0, 5]}
                 ticks={[0, 1, 2, 3, 4, 5]}
                 tick={<CustomYAxisTick />}
@@ -189,12 +208,14 @@ const MoodChart = ({ moodEntries = [] }) => {
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend content={<CustomLegend />} />
-              
+
               {/* Render lines for each entry type that has data */}
-              {Object.keys(entryTypeColors).map(entryType => {
-                const hasData = chartData.some(data => data[entryType] !== undefined);
+              {Object.keys(entryTypeColors).map((entryType) => {
+                const hasData = chartData.some(
+                  (data) => data[entryType] !== undefined,
+                );
                 if (!hasData) return null;
-                
+
                 return (
                   <Line
                     key={entryType}
@@ -202,15 +223,23 @@ const MoodChart = ({ moodEntries = [] }) => {
                     dataKey={entryType}
                     stroke={entryTypeColors[entryType]}
                     strokeWidth={3}
-                    dot={{ fill: entryTypeColors[entryType], strokeWidth: 2, r: 4 }}
-                    activeDot={{ r: 6, stroke: entryTypeColors[entryType], strokeWidth: 2 }}
+                    dot={{
+                      fill: entryTypeColors[entryType],
+                      strokeWidth: 2,
+                      r: 4,
+                    }}
+                    activeDot={{
+                      r: 6,
+                      stroke: entryTypeColors[entryType],
+                      strokeWidth: 2,
+                    }}
                     connectNulls={true}
                   />
                 );
               })}
             </LineChart>
           </ResponsiveContainer>
-          
+
           {/* Custom right-side mood labels */}
           {/* <div className="absolute top-0 right-0 h-full text-xs text-gray-600 pr-2 pointer-events-none">
             {moodLevels.map((level, index) => {
@@ -240,4 +269,4 @@ const MoodChart = ({ moodEntries = [] }) => {
   );
 };
 
-export default MoodChart; 
+export default MoodChart;

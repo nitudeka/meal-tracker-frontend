@@ -33,4 +33,4 @@ export const useSaveDietEntry = () => {
       console.error("Failed to save diet entry:", error);
     },
   });
-}; 
+};

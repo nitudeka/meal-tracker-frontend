@@ -18,7 +18,12 @@ const entryTypeLabels = {
 };
 
 const MoodHistory = ({ onAddEntry }) => {
-  const { data: moodEntriesData = {}, isLoading, error, refetch } = useMoodEntries();
+  const {
+    data: moodEntriesData = {},
+    isLoading,
+    error,
+    refetch,
+  } = useMoodEntries();
   const moodEntries = moodEntriesData?.data || [];
 
   const formatDate = (dateString) => {
@@ -27,9 +32,9 @@ const MoodHistory = ({ onAddEntry }) => {
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -40,9 +45,11 @@ const MoodHistory = ({ onAddEntry }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm border">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Your Mood History</h3>
+        <h3 className="text-lg font-semibold text-gray-900">
+          Your Mood History
+        </h3>
       </div>
-      
+
       {isLoading && (
         <div className="p-8 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -50,38 +57,39 @@ const MoodHistory = ({ onAddEntry }) => {
         </div>
       )}
 
-              {error && (
-          <div className="p-6 text-center">
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <p className="text-red-600">{error.message || "Failed to fetch mood entries"}</p>
-              <Button 
-                variant="outline" 
-                className="mt-2"
-                onClick={handleRefresh}
-              >
-                Try Again
-              </Button>
-            </div>
+      {error && (
+        <div className="p-6 text-center">
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <p className="text-red-600">
+              {error.message || "Failed to fetch mood entries"}
+            </p>
+            <Button variant="outline" className="mt-2" onClick={handleRefresh}>
+              Try Again
+            </Button>
           </div>
-        )}
+        </div>
+      )}
 
       {!isLoading && !error && moodEntries.length === 0 && (
         <div className="p-8 text-center">
           <div className="text-6xl mb-4">😊</div>
-          <h4 className="text-lg font-medium text-gray-900 mb-2">No mood entries yet</h4>
-          <p className="text-gray-500 mb-4">Start tracking your mood by adding your first entry</p>
-          <Button 
-            onClick={onAddEntry}
-          >
-            Add Your First Entry
-          </Button>
+          <h4 className="text-lg font-medium text-gray-900 mb-2">
+            No mood entries yet
+          </h4>
+          <p className="text-gray-500 mb-4">
+            Start tracking your mood by adding your first entry
+          </p>
+          <Button onClick={onAddEntry}>Add Your First Entry</Button>
         </div>
       )}
 
       {!isLoading && !error && moodEntries.length > 0 && (
         <div className="divide-y divide-gray-200">
           {moodEntries.map((entry, index) => (
-            <div key={entry.id || index} className="px-4 py-3 hover:bg-gray-50 transition-colors">
+            <div
+              key={entry.id || index}
+              className="px-4 py-3 hover:bg-gray-50 transition-colors"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="text-3xl">
@@ -110,4 +118,4 @@ const MoodHistory = ({ onAddEntry }) => {
   );
 };
 
-export default MoodHistory; 
+export default MoodHistory;

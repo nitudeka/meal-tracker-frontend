@@ -3,14 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const Nutrients = ({ formData, onComplete, onNext, onPrevious, currentStep, totalSteps }) => {
-  const [nutrients, setNutrients] = useState(formData.nutrients || {
-    calories: 100,
-    protein: 100,
-    fats: 100,
-    fibre: 100,
-    sugar: 100,
-  });
+const Nutrients = ({
+  formData,
+  onComplete,
+  onNext,
+  onPrevious,
+  currentStep,
+  totalSteps,
+}) => {
+  const [nutrients, setNutrients] = useState(
+    formData.nutrients || {
+      calories: 100,
+      protein: 100,
+      fats: 100,
+      fibre: 100,
+      sugar: 100,
+    },
+  );
 
   const nutrientFields = [
     { key: "calories", label: "Calories", unit: "kcal" },
@@ -21,9 +30,9 @@ const Nutrients = ({ formData, onComplete, onNext, onPrevious, currentStep, tota
   ];
 
   const handleNutrientChange = (key, value) => {
-    setNutrients(prev => ({
+    setNutrients((prev) => ({
       ...prev,
-      [key]: parseFloat(value) || 0
+      [key]: parseFloat(value) || 0,
     }));
   };
 
@@ -36,16 +45,22 @@ const Nutrients = ({ formData, onComplete, onNext, onPrevious, currentStep, tota
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">Crunch the Numbers</h3>
+        <h3 className="text-lg font-semibold text-gray-900">
+          Crunch the Numbers
+        </h3>
         <p className="text-sm text-gray-600 mt-1">
-          Here's your nutrition breakdown. All looks good? Hit Confirm to log this delicious crime.
+          Here's your nutrition breakdown. All looks good? Hit Confirm to log
+          this delicious crime.
         </p>
       </div>
 
       {/* Nutrition Fields */}
       <div className="space-y-4">
         {nutrientFields.map((field) => (
-          <div key={field.key} className="grid grid-cols-3 p-3 border border-gray-200 rounded-lg">
+          <div
+            key={field.key}
+            className="grid grid-cols-3 p-3 border border-gray-200 rounded-lg"
+          >
             <Label className="text-sm font-medium text-gray-700 flex-1">
               {field.label}
             </Label>
@@ -53,11 +68,15 @@ const Nutrients = ({ formData, onComplete, onNext, onPrevious, currentStep, tota
               <Input
                 type="number"
                 value={nutrients[field.key]}
-                onChange={(e) => handleNutrientChange(field.key, e.target.value)}
+                onChange={(e) =>
+                  handleNutrientChange(field.key, e.target.value)
+                }
                 className="w-20 text-right"
               />
             </div>
-            <div className="text-sm flex items-center pl-6 text-gray-600">{field.unit}</div>
+            <div className="text-sm flex items-center pl-6 text-gray-600">
+              {field.unit}
+            </div>
           </div>
         ))}
       </div>

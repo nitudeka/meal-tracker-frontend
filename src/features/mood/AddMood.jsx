@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { toast } from "sonner"
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -106,7 +106,7 @@ const AddMood = ({ onMoodSaved }) => {
         onError: (err) => {
           toast.error(err.message || "Failed to save mood entry");
         },
-      }
+      },
     );
   };
 
@@ -149,15 +149,15 @@ const AddMood = ({ onMoodSaved }) => {
           ))}
         </div>
       </div>
-      
+
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
           <p className="text-sm text-red-600">{error}</p>
         </div>
       )}
-      
-      <Button 
-        className="w-full" 
+
+      <Button
+        className="w-full"
         onClick={handleSaveMood}
         disabled={saveMoodMutation.isPending || !mood}
       >

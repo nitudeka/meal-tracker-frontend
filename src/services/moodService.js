@@ -4,7 +4,7 @@ export const moodService = {
   // Save a new mood entry
   saveMoodEntry: async (moodData) => {
     const { date, entryType, mood } = moodData;
-    
+
     return await apiUtils.post("/mood", {
       date,
       entryType,
@@ -16,4 +16,4 @@ export const moodService = {
   getMoodEntries: async (params = {}) => {
     return await apiUtils.get("/mood", { params });
   },
-}; 
+};

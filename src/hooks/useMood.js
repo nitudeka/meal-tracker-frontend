@@ -15,14 +15,14 @@ export const useMoodEntries = (filters = {}) => {
     const today = new Date();
     const endDate = new Date(today);
     endDate.setHours(23, 59, 59, 999); // End of today
-    
+
     const startDate = new Date(today);
     startDate.setDate(today.getDate() - 6); // 7 days ago (including today)
     startDate.setHours(0, 0, 0, 0); // Start of day
-    
+
     return {
-      startDate: startDate.toISOString().split('T')[0], // YYYY-MM-DD format
-      endDate: endDate.toISOString().split('T')[0], // YYYY-MM-DD format
+      startDate: startDate.toISOString().split("T")[0], // YYYY-MM-DD format
+      endDate: endDate.toISOString().split("T")[0], // YYYY-MM-DD format
     };
   };
 
@@ -50,4 +50,4 @@ export const useSaveMoodEntry = () => {
       console.error("Failed to save mood entry:", error);
     },
   });
-}; 
+};
