@@ -26,6 +26,15 @@ const Meals = () => {
     return labels[mealType] || mealType;
   };
 
+  const getMealsGridClassName = () => {
+    const classNamesMap = {
+      1: "grid-cols-1",
+      2: "grid-cols-2",
+      3: "grid-cols-3",
+    }
+    return classNamesMap[mealsData.length] || "grid-cols-1";
+  }
+
   return (
     <Card className="w-full pb-0 overflow-hidden gap-2 pt-4">
       <CardHeader>
@@ -47,7 +56,7 @@ const Meals = () => {
         )}
         
         {!isLoading && !error && mealsData && (
-          <div className={`grid grid-cols-${mealsData.length} border-t border-gray-200`}>
+          <div className={`grid ${getMealsGridClassName()} border-t border-gray-200`}>
             {mealsData.map((dayData, index) => (
             <div
               key={dayData.date}
