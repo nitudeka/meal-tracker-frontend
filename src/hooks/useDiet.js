@@ -39,6 +39,16 @@ export const useDailyNutrition = (date) => {
   });
 };
 
+// Hook to get meals history
+export const useMealsHistory = () => {
+  return useQuery({
+    queryKey: [...dietKeys.all, "history"],
+    queryFn: () => dietService.getMealsHistory(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+};
+
 // Hook to save a diet entry
 export const useSaveDietEntry = () => {
   const queryClient = useQueryClient();

@@ -1,6 +1,7 @@
-import NutritionTrends from "./NutrititionTrends";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
+import { Button } from "@/components/ui/button";
+import NutritionTrends from "./NutrititionTrends";
+import Meals from "./Meals";
 
 const DietHistory = () => {
     const navigate = useNavigate();
@@ -17,8 +18,9 @@ const DietHistory = () => {
         <Button className="absolute right-0 top-0" onClick={handleAddEntry}>+ Add Entry</Button>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl space-y-6 mx-auto">
         <NutritionTrends />
+        <Meals />
       </div>
     </div>
   );
