@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { moodService } from "@/services";
+import dayjs from "dayjs";
 
 // Query keys
 export const moodKeys = {
@@ -12,17 +13,9 @@ export const moodKeys = {
 export const useMoodEntries = (filters = {}) => {
   // Calculate one week date range from current date
   const getDateRange = () => {
-    const today = new Date();
-    const endDate = new Date(today);
-    endDate.setHours(23, 59, 59, 999); // End of today
-
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 6); // 7 days ago (including today)
-    startDate.setHours(0, 0, 0, 0); // Start of day
-
     return {
-      startDate: startDate.toISOString().split("T")[0], // YYYY-MM-DD format
-      endDate: endDate.toISOString().split("T")[0], // YYYY-MM-DD format
+      startDate: dayjs().add(-7, 'days').format("YYYY-MM-DD"),
+      endDate: dayjs().add(1, 'day').format("YYYY-MM-DD"),
     };
   };
 

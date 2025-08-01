@@ -50,7 +50,6 @@ const Nutrients = ({
     { key: "calories", label: "Calories", unit: "kcal" },
     { key: "protein", label: "Protein", unit: "g" },
     { key: "fat", label: "Fat", unit: "g" },
-    { key: "carbohydrates", label: "Carbohydrates", unit: "g" },
     { key: "fibre", label: "Fibre", unit: "g" },
     { key: "sugar", label: "Sugar", unit: "g" },
   ];

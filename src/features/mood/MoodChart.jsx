@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import dayjs from "dayjs";
 
 const moodLevels = [
   { value: 5, mood: "happy", label: "Happy", emoji: "😊" },
@@ -50,11 +51,10 @@ const MoodChart = ({ moodEntries = [] }) => {
 
         const dayKey = date.toISOString().split("T")[0]; // YYYY-MM-DD format
         const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
-        const dayLetter = dayName.charAt(0); // Get first letter
 
         days.push({
           date: dayKey,
-          day: dayLetter,
+          day: dayName,
         });
       }
 
@@ -63,22 +63,19 @@ const MoodChart = ({ moodEntries = [] }) => {
 
     // Get all week days
     const weekDays = generateWeekDays();
-
     if (!moodEntries.length) return weekDays;
 
     // Group entries by date and entry type
     const groupedData = {};
 
     moodEntries.forEach((entry) => {
-      const date = new Date(entry.date);
-      const dayKey = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+      const date = dayjs(entry.date).format("YYYY-MM-DD");
 
-      if (!groupedData[dayKey]) {
-        const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
-        const dayLetter = dayName.charAt(0); // Get first letter
-        groupedData[dayKey] = {
-          date: dayKey,
-          day: dayLetter,
+      if (!groupedData[date]) {
+        const dayName = dayjs(entry.date).format("ddd");
+        groupedData[date] = {
+          date: date,
+          day: dayName,
         };
       }
       // Convert mood string to numeric value
@@ -86,16 +83,21 @@ const MoodChart = ({ moodEntries = [] }) => {
         (level) => level.mood.toLowerCase() === entry.mood.toLowerCase(),
       )?.value;
 
-      groupedData[dayKey][entry.entryType] = moodValue;
+      groupedData[date][entry.entryType] = moodValue;
     });
 
     // Merge week days with mood data
-    return weekDays.map((weekDay) => ({
-      ...weekDay,
-      ...groupedData[weekDay.date],
-    }));
-  }, [moodEntries]);
+    const data = weekDays.map((weekDay) => {
+        if (!groupedData[weekDay.date]) {
+        return weekDay
+      }
+      
+      return groupedData[weekDay.date]
+    });
 
+    return data
+  }, [moodEntries]);
+  
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
