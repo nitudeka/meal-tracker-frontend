@@ -5,6 +5,7 @@ import PrivateRoute from "../features/auth/PrivateRoute";
 import MoodPage from "../features/mood";
 import AddMood from "../features/mood/AddMood";
 import DietPage from "@/features/diet";
+import DietHistory from "@/features/diet/history";
 
 const Router = () => {
   return (
@@ -16,8 +17,8 @@ const Router = () => {
       <Route element={<PrivateRoute />}>
         <Route path="/" index element={<MoodPage />} />
         <Route path="/mood/add" element={<AddMood />} />
-        <Route path="/diet" element={<h1>tesadfa</h1>} />
         <Route path="/diet/add" element={<DietPage />} />
+        <Route path="/diet" element={<DietHistory />} />
       </Route>
     </Routes>
   );
