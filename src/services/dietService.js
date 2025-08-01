@@ -23,6 +23,11 @@ export const dietService = {
     return await apiUtils.get("/meal/history");
   },
 
+  // Get weekly nutrition data
+  getWeeklyNutrition: async () => {
+    return await apiUtils.get("/meal/weekly-nutrition");
+  },
+
   // Save diet entry (for future use)
   saveDietEntry: async (dietData) => {
     return await apiUtils.post("/meal", dietData);

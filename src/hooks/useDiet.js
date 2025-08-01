@@ -49,6 +49,16 @@ export const useMealsHistory = () => {
   });
 };
 
+// Hook to get weekly nutrition data
+export const useWeeklyNutrition = () => {
+  return useQuery({
+    queryKey: [...dietKeys.all, "weekly-nutrition"],
+    queryFn: () => dietService.getWeeklyNutrition(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+};
+
 // Hook to save a diet entry
 export const useSaveDietEntry = () => {
   const queryClient = useQueryClient();

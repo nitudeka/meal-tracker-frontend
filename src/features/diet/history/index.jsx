@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import NutritionTrends from "./NutrititionTrends";
+import NutritionChart from "./NutritionChart";
 import Meals from "./Meals";
 
 const DietHistory = () => {
@@ -20,6 +21,7 @@ const DietHistory = () => {
 
       <div className="max-w-6xl space-y-6 mx-auto">
         <NutritionTrends />
+        <NutritionChart />
         <Meals />
       </div>
     </div>
