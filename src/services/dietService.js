@@ -13,6 +13,11 @@ export const dietService = {
     return await apiUtils.post("/meal/nutrients", { ingredients });
   },
 
+  // Get daily nutrition trends
+  getDailyNutrition: async (date) => {
+    return await apiUtils.get(`/meal/daily-nutrition?date=${date}`);
+  },
+
   // Save diet entry (for future use)
   saveDietEntry: async (dietData) => {
     return await apiUtils.post("/meal", dietData);

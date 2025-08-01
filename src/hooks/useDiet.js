@@ -29,6 +29,16 @@ export const useNutrients = () => {
   });
 };
 
+// Hook to get daily nutrition trends
+export const useDailyNutrition = (date) => {
+  return useQuery({
+    queryKey: [...dietKeys.all, "daily-nutrition", date],
+    queryFn: () => dietService.getDailyNutrition(date),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+};
+
 // Hook to save a diet entry
 export const useSaveDietEntry = () => {
   const queryClient = useQueryClient();
