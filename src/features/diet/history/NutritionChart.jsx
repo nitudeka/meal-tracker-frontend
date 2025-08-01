@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format, startOfWeek, addDays } from "date-fns";
 import { useWeeklyNutrition } from "@/hooks";
+import dayjs from "dayjs";
 
 const NutritionChart = () => {
   const [activeTab, setActiveTab] = useState("carbs");
@@ -10,13 +11,30 @@ const NutritionChart = () => {
   // Fetch weekly nutrition data from API
   const { data: apiData, isLoading, error } = useWeeklyNutrition();
 
-  // Use API data or fallback to empty array
-  const chartData = apiData?.data || [];
-
   const tabs = [
     { id: "protein", label: "Protein" },
     { id: "carbs", label: "Carbs" },
   ];
+
+  const chartData = useMemo(() => {    
+    if (!apiData) return [];
+
+    const data = apiData.data.map((item) => {
+      const date = dayjs(item.date);
+      
+      const processedItem = {
+        ...item,
+        rawDate: date.format("D MMM, YYYY"),
+        day: date.format("ddd").charAt(0),
+        date: date.format("DD"),
+        month: date.format("MMM")
+      };
+      
+      return processedItem;
+    })
+
+    return data;
+  }, [apiData]);
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -49,22 +67,19 @@ const NutritionChart = () => {
   };
 
   const CustomXAxisTick = ({ x, y, payload }) => {
-    const dayData = chartData.find(item => item.day === payload.value);
+    const dayData = chartData.find(item => item.rawDate === payload.value);
+    
     return (
       <g transform={`translate(${x},${y})`}>
         <text x={0} y={0} dy={8} textAnchor="middle" fill="#6B7280" className="text-xs font-medium">
-          {payload.value}
+          {dayData.day}
         </text>
-        {dayData && (
-          <>
-            <text x={0} y={0} dy={20} textAnchor="middle" fill="#9CA3AF" className="text-xs">
-              {dayData.date}
-            </text>
-            <text x={0} y={0} dy={32} textAnchor="middle" fill="#9CA3AF" className="text-[0.6rem]">
-              {dayData.month}
-            </text>
-          </>
-        )}
+        <text x={0} y={0} dy={20} textAnchor="middle" fill="#9CA3AF" className="text-xs">
+          {dayData.date}
+        </text>
+        <text x={0} y={0} dy={32} textAnchor="middle" fill="#9CA3AF" className="text-[0.6rem]">
+          {dayData.month}
+        </text>
       </g>
     );
   };
@@ -123,11 +138,12 @@ const NutritionChart = () => {
             <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis
-                dataKey="day"
+                dataKey="rawDate"
                 tick={<CustomXAxisTick />}
                 axisLine={false}
                 tickLine={false}
                 height={60}
+                interval={0}
               />
               <YAxis
                 tick={<CustomYAxisTick />}
