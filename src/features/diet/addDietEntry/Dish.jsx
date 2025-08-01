@@ -1,0 +1,124 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Trash2, Plus } from "lucide-react";
+
+const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
+  const [dish, setDish] = useState(formData.dish || "");
+  const [ingredients, setIngredients] = useState(formData.ingredients || [
+    { name: "Chicken", quantity: 100, unit: "g" },
+    { name: "Cream", quantity: 10, unit: "g" },
+    { name: "Onion", quantity: 8, unit: "g" },
+    { name: "Tomato Puree", quantity: 8, unit: "g" },
+  ]);
+
+  const handleAddIngredient = () => {
+    setIngredients([
+      ...ingredients,
+      { name: "", quantity: 0, unit: "g" }
+    ]);
+  };
+
+  const handleRemoveIngredient = (index) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
+
+  const handleIngredientChange = (index, field, value) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients[index] = {
+      ...updatedIngredients[index],
+      [field]: value
+    };
+    setIngredients(updatedIngredients);
+  };
+
+  const handleNext = () => {
+    onComplete({ dish, ingredients });
+    onNext();
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900">Mix It Up</h3>
+        <p className="text-sm text-gray-600 mt-1">
+          Here's the usual recipe lineup. Tweak anything you like, then hit Confirm to cook things up.
+        </p>
+      </div>
+
+      {/* Dish Selection */}
+      <div>
+        <Label className="text-sm font-medium text-gray-700">Dish</Label>
+        <Input
+          value={dish}
+          onChange={(e) => setDish(e.target.value)}
+          placeholder="Enter dish name"
+          className="mt-1"
+        />
+      </div>
+
+      {/* Ingredients Section */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <Label className="text-sm font-medium text-gray-700">Quantity</Label>
+        </div>
+
+        <div className="space-y-3">
+          {ingredients.map((ingredient, index) => (
+            <div key={index} className="flex items-center p-3 border border-gray-200 rounded-lg">
+              <div className="flex-1 mr-2">
+                <Input
+                  value={ingredient.name}
+                  onChange={(e) => handleIngredientChange(index, "name", e.target.value)}
+                  placeholder="Ingredient name"
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="number"
+                  value={ingredient.quantity}
+                  onChange={(e) => handleIngredientChange(index, "quantity", parseFloat(e.target.value))}
+                  className="w-12"
+                />
+                <span className="text-sm text-gray-600 w-4">{ingredient.unit}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleRemoveIngredient(index)}
+                className="text-red-500 -mr-2 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        {/* Add Ingredient Button */}
+        <Button
+          variant="outline"
+          onClick={handleAddIngredient}
+          className="mt-4 w-full border-gray-200 text-green-700 hover:bg-green-50"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Ingredient
+        </Button>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex justify-end">
+        <Button
+          onClick={handleNext}
+          disabled={!dish || ingredients.length === 0}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default Dish;

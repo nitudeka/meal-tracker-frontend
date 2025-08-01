@@ -4,6 +4,7 @@ import LoginPage from "../features/auth/Login";
 import PrivateRoute from "../features/auth/PrivateRoute";
 import MoodPage from "../features/mood";
 import AddMood from "../features/mood/AddMood";
+import DietPage from "@/features/diet";
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
       <Route element={<PrivateRoute />}>
         <Route path="/" index element={<MoodPage />} />
         <Route path="/mood/add" element={<AddMood />} />
+        <Route path="/diet" element={<DietPage />} />
       </Route>
     </Routes>
   );
