@@ -6,6 +6,7 @@ import MoodPage from "../features/mood";
 import AddMood from "../features/mood/AddMood";
 import DietPage from "@/features/diet";
 import DietHistory from "@/features/diet/history";
+import ProfilePage from "@/features/profile";
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
         <Route path="/mood/add" element={<AddMood />} />
         <Route path="/diet/add" element={<DietPage />} />
         <Route path="/diet" element={<DietHistory />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   );

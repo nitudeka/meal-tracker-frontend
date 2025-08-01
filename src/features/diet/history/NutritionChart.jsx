@@ -83,7 +83,7 @@ const NutritionChart = () => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full pt-4 pb-0 gap-2">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-gray-900">
           Nutrition Trends
