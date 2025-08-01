@@ -1,17 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Plus } from "lucide-react";
+import { useIngredients } from "@/hooks";
 
 const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
   const [dish, setDish] = useState(formData.dish || "");
-  const [ingredients, setIngredients] = useState(formData.ingredients || [
-    { name: "Chicken", quantity: 100, unit: "g" },
-    { name: "Cream", quantity: 10, unit: "g" },
-    { name: "Onion", quantity: 8, unit: "g" },
-    { name: "Tomato Puree", quantity: 8, unit: "g" },
-  ]);
+  const [ingredients, setIngredients] = useState(formData.ingredients || []);
+  const [showIngredients, setShowIngredients] = useState(false);
+
+  const { mutate: fetchIngredients, data: ingredientsData, isLoading, error } = useIngredients();
+
+  const handleFetchIngredients = () => {
+    if (!dish.trim()) {
+      return;
+    }
+    
+    fetchIngredients(dish);
+  };
+
+  // Parse quantity string to separate amount and unit
+  const parseQuantity = (quantityStr) => {
+    if (!quantityStr) return null;
+    
+    // Extract number and unit from strings like "500g", "30g", "5g"
+    const match = quantityStr.match(/^(\d+(?:\.\d+)?)(.*)$/);
+    if (match) {
+      return {
+        quantity: parseFloat(match[1]),
+        unit: match[2] || "g"
+      };
+    }
+    
+    // Skip if no numeric quantity found
+    return null;
+  };
+
+  // Handle API response
+  useEffect(() => {
+    if (ingredientsData?.ingredients) {
+      // Parse the API response to match our component's expected format
+      const parsedIngredients = ingredientsData.ingredients
+        .map(ingredient => {
+          const parsed = parseQuantity(ingredient.quantity);
+          if (parsed) {
+            return {
+              name: ingredient.name,
+              quantity: parsed.quantity,
+              unit: parsed.unit
+            };
+          }
+          return null;
+        })
+        .filter(ingredient => ingredient !== null); // Remove null ingredients
+      setIngredients(parsedIngredients);
+      setShowIngredients(true);
+    } else if (error) {
+      // Fallback to default ingredients for demo
+      setIngredients([
+        { name: "Chicken", quantity: 100, unit: "g" },
+        { name: "Cream", quantity: 10, unit: "g" },
+        { name: "Onion", quantity: 8, unit: "g" },
+        { name: "Tomato Puree", quantity: 8, unit: "g" },
+      ]);
+      setShowIngredients(true);
+    }
+  }, [ingredientsData, error]);
 
   const handleAddIngredient = () => {
     setIngredients([
@@ -59,53 +114,64 @@ const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
         />
       </div>
 
+      {/* Get Ingredients Button */}
+      <Button
+        onClick={handleFetchIngredients}
+        disabled={!dish.trim() || isLoading}
+        className="w-full bg-green-600 hover:bg-green-700 text-white"
+      >
+        {isLoading ? "Loading..." : "Get Ingredients"}
+      </Button>
+
       {/* Ingredients Section */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <Label className="text-sm font-medium text-gray-700">Quantity</Label>
-        </div>
+      {showIngredients && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <Label className="text-sm font-medium text-gray-700">Quantity</Label>
+          </div>
 
-        <div className="space-y-3">
-          {ingredients.map((ingredient, index) => (
-            <div key={index} className="flex items-center p-3 border border-gray-200 rounded-lg">
-              <div className="flex-1 mr-2">
-                <Input
-                  value={ingredient.name}
-                  onChange={(e) => handleIngredientChange(index, "name", e.target.value)}
-                  placeholder="Ingredient name"
-                />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="number"
-                  value={ingredient.quantity}
-                  onChange={(e) => handleIngredientChange(index, "quantity", parseFloat(e.target.value))}
-                  className="w-12"
-                />
-                <span className="text-sm text-gray-600 w-4">{ingredient.unit}</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleRemoveIngredient(index)}
-                className="text-red-500 -mr-2 hover:text-red-700 hover:bg-red-50"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+            <div className="space-y-3">
+            {ingredients.map((ingredient, index) => (
+                <div key={index} className="flex items-center p-3 border border-gray-200 rounded-lg">
+                <div className="flex-1 mr-2">
+                    <Input
+                    value={ingredient.name}
+                    onChange={(e) => handleIngredientChange(index, "name", e.target.value)}
+                    placeholder="Ingredient name"
+                    />
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Input
+                    type="number"
+                    value={ingredient.quantity}
+                    onChange={(e) => handleIngredientChange(index, "quantity", parseFloat(e.target.value))}
+                    className="w-12"
+                    />
+                    <span className="text-sm text-gray-600 w-4">{ingredient.unit}</span>
+                </div>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveIngredient(index)}
+                    className="text-red-500 -mr-2 hover:text-red-700 hover:bg-red-50"
+                >
+                    <Trash2 className="w-4 h-4" />
+                </Button>
+                </div>
+            ))}
             </div>
-          ))}
-        </div>
 
-        {/* Add Ingredient Button */}
-        <Button
-          variant="outline"
-          onClick={handleAddIngredient}
-          className="mt-4 w-full border-gray-200 text-green-700 hover:bg-green-50"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Ingredient
-        </Button>
-      </div>
+            {/* Add Ingredient Button */}
+            <Button
+            variant="outline"
+            onClick={handleAddIngredient}
+            className="mt-4 w-full border-gray-200 text-green-700 hover:bg-green-50"
+            >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Ingredient
+            </Button>
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="flex justify-end">
