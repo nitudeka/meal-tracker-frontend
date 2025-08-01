@@ -81,7 +81,7 @@ const MoodHistory = ({ onAddEntry }) => {
       {!isLoading && !error && moodEntries.length > 0 && (
         <div className="divide-y divide-gray-200">
           {moodEntries.map((entry, index) => (
-            <div key={entry.id || index} className="p-6 hover:bg-gray-50 transition-colors">
+            <div key={entry.id || index} className="px-4 py-3 hover:bg-gray-50 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="text-3xl">
