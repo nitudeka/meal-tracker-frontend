@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useSaveDietEntry } from "@/hooks";
 import Dish from "./addDietEntry/Dish";
 import Nutrients from "./addDietEntry/Nutrients";
 import DietTime from "./addDietEntry/Time";
 
 const DietPage = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     dish: "",
@@ -13,13 +16,16 @@ const DietPage = () => {
     nutrients: {
       calories: 0,
       protein: 0,
-      fats: 0,
+      fat: 0,
+      carbohydrates: 0,
       fibre: 0,
       sugar: 0,
     },
     date: new Date(),
     mealType: "",
   });
+
+  const { mutate: saveDietEntry, isLoading: isSaving } = useSaveDietEntry();
 
   const steps = [
     { id: 1, title: "Ingredients", component: Dish },
@@ -40,12 +46,36 @@ const DietPage = () => {
   };
 
   const handleStepComplete = (stepData) => {
-    setFormData((prev) => ({ ...prev, ...stepData }));
+    const newFormData = { ...formData, ...stepData };
+    setFormData(newFormData);
+
+    // Only submit to API on the final step (step 3)
+    if (currentStep === 3) {
+      handleSubmit(newFormData);
+    }
   };
 
-  const handleSubmit = () => {
-    console.log("Final form data:", formData);
-    // TODO: Submit to API
+  const handleSubmit = (formData) => {
+    // Format the data for the API
+    const apiData = {
+      dish: formData.dish,
+      ingredients: formData.ingredients,
+      nutrients: formData.nutrients,
+      date: formData.date.toISOString().split('T')[0], // Format as YYYY-MM-DD
+      mealType: formData.mealType
+    };
+
+    saveDietEntry(apiData, {
+      onSuccess: (data) => {
+        console.log("Diet entry saved successfully:", data);
+        toast.success("Diet entry saved successfully!");
+        navigate("/diet");
+      },
+      onError: (error) => {
+        console.error("Failed to save diet entry:", error);
+        toast.error(error.message || "Failed to save diet entry");
+      }
+    });
   };
 
   const CurrentStepComponent = steps[currentStep - 1].component;
@@ -100,6 +130,7 @@ const DietPage = () => {
             onPrevious={handlePrevious}
             currentStep={currentStep}
             totalSteps={steps.length}
+            isSaving={isSaving}
           />
         </CardContent>
       </Card>

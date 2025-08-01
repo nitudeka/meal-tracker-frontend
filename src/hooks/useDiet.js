@@ -19,6 +19,16 @@ export const useIngredients = () => {
   });
 };
 
+// Hook to get nutrients for ingredients
+export const useNutrients = () => {
+  return useMutation({
+    mutationFn: (ingredients) => dietService.getNutrients(ingredients),
+    onError: (error) => {
+      console.error("Failed to fetch nutrients:", error);
+    },
+  });
+};
+
 // Hook to save a diet entry
 export const useSaveDietEntry = () => {
   const queryClient = useQueryClient();

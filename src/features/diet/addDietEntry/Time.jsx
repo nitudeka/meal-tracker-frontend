@@ -7,10 +7,8 @@ import { Calendar, Utensils } from "lucide-react";
 const DietTime = ({
   formData,
   onComplete,
-  onNext,
   onPrevious,
-  currentStep,
-  totalSteps,
+  isSaving = false,
 }) => {
   const [date, setDate] = useState(formData?.date || new Date());
   const [mealType, setMealType] = useState(formData?.mealType || "");
@@ -24,8 +22,6 @@ const DietTime = ({
 
   const handleSubmit = () => {
     onComplete({ date, mealType });
-    // TODO: Submit to API
-    console.log("Submitting diet entry:", { ...formData, date, mealType });
   };
 
   return (
@@ -88,10 +84,10 @@ const DietTime = ({
         </Button>
         <Button
           onClick={handleSubmit}
-          disabled={!mealType}
+          disabled={!mealType || isSaving}
           className="bg-green-600 hover:bg-green-700 text-white"
         >
-          Confirm
+          {isSaving ? "Saving..." : "Confirm"}
         </Button>
       </div>
     </div>

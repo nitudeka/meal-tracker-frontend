@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,23 +8,49 @@ const Nutrients = ({
   onComplete,
   onNext,
   onPrevious,
-  currentStep,
-  totalSteps,
 }) => {
   const [nutrients, setNutrients] = useState(
     formData.nutrients || {
-      calories: 100,
-      protein: 100,
-      fats: 100,
-      fibre: 100,
-      sugar: 100,
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbohydrates: 0,
+      fibre: 0,
+      sugar: 0,
     },
   );
+
+  // Parse nutrient value from API response (handles both numbers and strings like "130g")
+  const parseNutrientValue = (value) => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+      const match = value.match(/^(\d+(?:\.\d+)?)/);
+      return match ? parseFloat(match[1]) : 0;
+    }
+    return 0;
+  };
+
+  // Update nutrients when formData.nutrients changes (from API)
+  useEffect(() => {
+    if (formData.nutrients) {
+      // Parse the API response to extract numeric values
+      const parsedNutrients = {
+        calories: parseNutrientValue(formData.nutrients.calories),
+        protein: parseNutrientValue(formData.nutrients.protein),
+        fat: parseNutrientValue(formData.nutrients.fat),
+        carbohydrates: parseNutrientValue(formData.nutrients.carbohydrates),
+        fibre: parseNutrientValue(formData.nutrients.fibre),
+        sugar: parseNutrientValue(formData.nutrients.sugar),
+      };
+      setNutrients(parsedNutrients);
+    }
+  }, [formData.nutrients]);
 
   const nutrientFields = [
     { key: "calories", label: "Calories", unit: "kcal" },
     { key: "protein", label: "Protein", unit: "g" },
-    { key: "fats", label: "Fats", unit: "g" },
+    { key: "fat", label: "Fat", unit: "g" },
+    { key: "carbohydrates", label: "Carbohydrates", unit: "g" },
     { key: "fibre", label: "Fibre", unit: "g" },
     { key: "sugar", label: "Sugar", unit: "g" },
   ];

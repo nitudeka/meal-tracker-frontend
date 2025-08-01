@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trash2, Plus } from "lucide-react";
-import { useIngredients } from "@/hooks";
+import { useIngredients, useNutrients } from "@/hooks";
 
-const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
+const Dish = ({ formData, onComplete, onNext }) => {
   const [dish, setDish] = useState(formData.dish || "");
   const [ingredients, setIngredients] = useState(formData.ingredients || []);
   const [showIngredients, setShowIngredients] = useState(false);
@@ -16,6 +16,11 @@ const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
     isLoading,
     error,
   } = useIngredients();
+
+  const {
+    mutate: fetchNutrients,
+    isLoading: isLoadingNutrients,
+  } = useNutrients();
 
   const handleFetchIngredients = () => {
     if (!dish.trim()) {
@@ -91,8 +96,30 @@ const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
   };
 
   const handleNext = () => {
-    onComplete({ dish, ingredients });
-    onNext();
+    // Format ingredients for the API
+    const formattedIngredients = ingredients.map(ingredient => ({
+      name: ingredient.name,
+      quantity: `${ingredient.quantity}${ingredient.unit}`
+    }));
+
+    // Call nutrients API
+    fetchNutrients(formattedIngredients, {
+      onSuccess: (data) => {
+        // Pass nutrients data along with dish and ingredients
+        onComplete({ 
+          dish, 
+          ingredients,
+          nutrients: data
+        });
+        onNext();
+      },
+      onError: (error) => {
+        console.error("Failed to fetch nutrients:", error);
+        // Still proceed to next step even if nutrients fail
+        onComplete({ dish, ingredients });
+        onNext();
+      }
+    });
   };
 
   return (
@@ -195,10 +222,10 @@ const Dish = ({ formData, onComplete, onNext, currentStep, totalSteps }) => {
       <div className="flex justify-end">
         <Button
           onClick={handleNext}
-          disabled={!dish || ingredients.length === 0}
+          disabled={!dish || ingredients.length === 0 || isLoadingNutrients}
           className="bg-green-600 hover:bg-green-700 text-white"
         >
-          Next
+          {isLoadingNutrients ? "Loading..." : "Next"}
         </Button>
       </div>
     </div>

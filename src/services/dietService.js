@@ -8,6 +8,11 @@ export const dietService = {
     );
   },
 
+  // Get nutrients for ingredients
+  getNutrients: async (ingredients) => {
+    return await apiUtils.post("/meal/nutrients", { ingredients });
+  },
+
   // Save diet entry (for future use)
   saveDietEntry: async (dietData) => {
     return await apiUtils.post("/meal", dietData);
